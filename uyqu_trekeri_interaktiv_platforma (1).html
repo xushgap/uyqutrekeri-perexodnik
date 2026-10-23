@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="uz" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uyqu Trekeri — Interaktiv Platforma</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        night: {
+                            900: '#141518',
+                            800: '#1c1d22',
+                            700: '#25272e'
+                        },
+                        moon: {
+                            light: '#e5d4ff',
+                            mid: '#b399e6',
+                            dark: '#6e569e',
+                            pill: '#dbe4ff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #161618;
+            color: #ffffff;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Twinkling animation for stars */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.35; transform: scale(0.9); }
+            50% { opacity: 0.95; transform: scale(1.12); }
+        }
+
+        .star-twinkle-1 { animation: twinkle 3.5s ease-in-out infinite; }
+        .star-twinkle-2 { animation: twinkle 4.8s ease-in-out infinite 1.2s; }
+        .star-twinkle-3 { animation: twinkle 2.9s ease-in-out infinite 2.1s; }
+
+        /* Moon container glow & realism */
+        .moon-wrapper {
+            will-change: transform;
+            filter: drop-shadow(0 -18px 65px rgba(178, 148, 246, 0.22));
+            transition: filter 0.4s ease;
+        }
+        .moon-wrapper:hover {
+            filter: drop-shadow(0 -22px 85px rgba(196, 167, 255, 0.36));
+        }
+
+        /* Pill button exact aesthetic from design */
+        .insomniac-pill {
+            background-color: #dce5ff;
+            color: #1d2230;
+            box-shadow: 0 0 25px rgba(220, 229, 255, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.8);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .insomniac-pill:hover {
+            background-color: #eaf0ff;
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 10px 35px rgba(219, 228, 255, 0.45), inset 0 2px 4px rgba(255, 255, 255, 1);
+        }
+    </style>
+</head>
+<body class="selection:bg-purple-400 selection:text-night-900">
+
+    <!-- ==========================================
+         SINGLE FULLSCREEN HERO SECTION (EXACT DESIGN FROM IMAGE)
+    =========================================== -->
+    <main id="hero" class="relative w-full h-screen overflow-hidden bg-[#161618] select-none flex flex-col justify-between">
+        
+        <!-- 1. BACKGROUND WAVY DARK HILLS (Left and Right silhouettes matching image) -->
+        <div id="parallax-hills" class="absolute inset-0 pointer-events-none z-0 transition-transform duration-75 ease-out">
+            <svg class="w-full h-full object-cover" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Back Subtle Hill Layer -->
+                <path d="M-100 440 C 120 430, 260 620, 480 650 C 700 680, 980 740, 1180 650 C 1320 580, 1400 490, 1540 440 L 1540 950 L -100 950 Z" fill="#212226" opacity="0.85"/>
+                <!-- Bottom Darker Hill Silhouette Layer -->
+                <path d="M-80 730 C 40 740, 110 820, 230 840 C 350 860, 450 920, 600 920 L 1050 920 C 1180 830, 1290 730, 1490 710 L 1490 960 L -80 960 Z" fill="#282a2f" opacity="0.9"/>
+            </svg>
+        </div>
+
+        <!-- 2. TOP-RIGHT ORBITAL RINGS & STARS LAYER (Parallax Layer 1) -->
+        <div id="parallax-orbits" class="absolute inset-0 pointer-events-none z-10">
+            <!-- Top Right Concentric Dashed & Dotted Rings -->
+            <svg class="w-full h-full" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="top-right-rings" class="origin-[1400px_40px]">
+                    <!-- Outer segmented arc -->
+                    <circle cx="1430" cy="15" r="360" stroke="#9ea0a6" stroke-width="2" stroke-dasharray="140 28 95 22 180 35" opacity="0.78" />
+                    <!-- Dotted middle ring -->
+                    <circle cx="1430" cy="15" r="332" stroke="#9ea0a6" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="1 10" opacity="0.72" />
+                    <!-- Inner segmented arc -->
+                    <circle cx="1430" cy="15" r="285" stroke="#9ea0a6" stroke-width="2" stroke-dasharray="190 25 80 30 120 40" opacity="0.75" />
+                    <!-- Innermost subtle dotted arc -->
+                    <circle cx="1430" cy="15" r="238" stroke="#9ea0a6" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="1 9" stroke-dashoffset="40" opacity="0.45" />
+
+                    <!-- Large 5-point/tilted star sitting on the outer top-right ring -->
+                    <path d="M1262 280 L1267 303 L1289 310 L1268 320 L1265 344 L1251 324 L1230 328 L1244 310 L1233 292 L1253 299 Z" fill="#9ea0a6" opacity="0.9"/>
+                </g>
+            </svg>
+        </div>
+
+        <!-- 3. SCATTERED STARS & DOTS (Parallax Layer 2 - Exact positions from reference image) -->
+        <div id="parallax-stars" class="absolute inset-0 pointer-events-none z-10">
+            <svg class="w-full h-full" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Star helper defs corresponding to the playful quirky stars in the screenshot -->
+                <defs>
+                    <!-- Quirky asymmetrical star shape 1 -->
+                    <g id="star-quirky-1">
+                        <path d="M 0 -16 L 4 -4 L 16 -2 L 6 5 L 10 16 L -1 9 L -12 14 L -7 3 L -15 -5 L -3 -5 Z" fill="#8c8e94"/>
+                    </g>
+                    <!-- Quirky star shape 2 (smaller tilted) -->
+                    <g id="star-quirky-2">
+                        <path d="M 0 -11 L 3 -3 L 12 0 L 3 4 L 5 12 L -2 5 L -10 8 L -5 1 L -9 -6 L -2 -4 Z" fill="#8c8e94"/>
+                    </g>
+                    <!-- Small sharp star -->
+                    <g id="star-small">
+                        <path d="M 0 -8 L 2 -2 L 8 -1 L 3 3 L 5 9 L 0 5 L -6 8 L -3 2 L -8 -2 L -2 -2 Z" fill="#8c8e94"/>
+                    </g>
+                </defs>
+
+                <!-- Stars around "Uyqu Trekeri" title -->
+                <use href="#star-quirky-2" x="585" y="75" class="star-twinkle-1" transform="rotate(-12 585 75) scale(1.1)" />
+                <!-- Big star integrated behind the 'e' in Trekeri -->
+                <path d="M 541 142 L 548 175 L 575 182 L 546 190 L 537 222 L 529 190 L 502 184 L 528 174 Z" fill="#8c8e94" opacity="0.78" />
+                
+                <!-- Center-top dots & stars -->
+                <circle cx="709" cy="145" r="5.5" fill="#85878d" class="star-twinkle-2" />
+                <circle cx="897" cy="116" r="6" fill="#85878d" />
+                <circle cx="856" cy="186" r="5" fill="#85878d" class="star-twinkle-3" />
+                <circle cx="558" cy="332" r="5.5" fill="#85878d" />
+                <circle cx="891" cy="385" r="5.5" fill="#85878d" class="star-twinkle-1" />
+
+                <use href="#star-quirky-1" x="708" y="256" class="star-twinkle-3" transform="rotate(8 708 256)" />
+                <use href="#star-quirky-2" x="902" y="268" class="star-twinkle-2" transform="rotate(-18 902 268)" />
+
+                <!-- Left side cluster near description text -->
+                <use href="#star-small" x="249" y="394" class="star-twinkle-1" />
+                <use href="#star-quirky-2" x="220" y="467" transform="scale(0.9)" />
+                <circle cx="333" cy="442" r="4" fill="#85878d" />
+                <circle cx="458" cy="422" r="4" fill="#85878d" class="star-twinkle-2" />
+                <circle cx="432" cy="470" r="3.5" fill="#85878d" />
+                <circle cx="229" cy="568" r="3.5" fill="#85878d" />
+                <use href="#star-small" x="333" y="517" class="star-twinkle-3" />
+                <use href="#star-small" x="462" y="525" class="star-twinkle-1" transform="rotate(20 462 525)" />
+
+                <!-- Right side cluster around insomniac.vercel.app pill -->
+                <circle cx="1176" cy="348" r="3.8" fill="#85878d" />
+                <circle cx="1218" cy="382" r="3.5" fill="#85878d" class="star-twinkle-2" />
+                <use href="#star-small" x="1268" y="346" transform="scale(0.85)" />
+                <circle cx="1338" cy="362" r="4" fill="#85878d" />
+                <circle cx="1188" cy="488" r="4" fill="#85878d" class="star-twinkle-1" />
+                <use href="#star-small" x="1256" y="492" class="star-twinkle-3" />
+                <use href="#star-small" x="1144" y="577" class="star-twinkle-2" />
+                <use href="#star-quirky-2" x="1207" y="616" transform="rotate(15 1207 616) scale(0.95)" />
+                <circle cx="1296" cy="606" r="3.8" fill="#85878d" />
+            </svg>
+        </div>
+
+        <!-- 4. FOREGROUND TEXT & PILL CONTENT -->
+        <div class="relative z-30 w-full max-w-[1440px] mx-auto px-8 sm:px-14 md:px-20 pt-16 sm:pt-20 md:pt-24 flex-1 flex flex-col justify-between pointer-events-none">
+            
+            <!-- Top-Left Heading: "Uyqu Trekeri" -->
+            <div id="hero-title-box" class="pointer-events-auto max-w-2xl">
+                <h1 class="font-heading font-bold text-5xl sm:text-6xl md:text-[76px] text-white tracking-tight leading-none drop-shadow-sm">
+                    Uyqu Trekeri
+                </h1>
+            </div>
+
+            <!-- Middle Row: Left Description & Right Pill Button -->
+            <div class="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-8 my-auto pb-28 sm:pb-36 md:pb-24">
+                
+                <!-- Left Description Paragraph (No extra button below) -->
+                <div id="hero-desc-box" class="pointer-events-auto max-w-[330px] sm:max-w-[370px]">
+                    <p class="text-[#d0d2d6] text-base sm:text-lg md:text-[21px] font-normal leading-[1.55] tracking-normal">
+                        tungi va kunduzgi uyquni
+                        kuzatish, uyqu davomiyligini
+                        hisoblash va uyqu odatlarini
+                        tahlil qilish uchun mo'ljallangan
+                        interaktiv platforma.
+                    </p>
+                </div>
+
+                <!-- Right Pill Badge: insomniac.vercel.app -->
+                <div id="hero-pill-box" class="pointer-events-auto md:mr-12 lg:mr-28 self-start md:self-center -mt-4 md:-mt-16">
+                    <a href="https://insomniac.vercel.app" target="_blank" rel="noopener noreferrer"
+                       class="insomniac-pill inline-flex items-center justify-center px-8 sm:px-10 py-3.5 sm:py-4 rounded-full text-lg sm:text-xl md:text-[23px] font-normal tracking-wide cursor-pointer">
+                        insomniac.vercel.app
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. GIANT INTERACTIVE PURPLE/LAVENDER MOON AT BOTTOM CENTER -->
+        <div class="absolute inset-x-0 bottom-0 z-20 flex justify-center items-end pointer-events-none overflow-visible">
+            
+            <!-- Moon Interactive Wrapper (Moves up & down with cursor Y and wheel) -->
+            <div id="interactive-moon" class="moon-wrapper relative flex justify-center items-center pointer-events-auto cursor-grab active:cursor-grabbing"
+                 style="width: min(92vw, 860px); height: min(92vw, 860px); margin-bottom: calc(min(92vw, 860px) * -0.47);">
+                
+                <!-- Orbital Dashed Arc + Large Star hugging the top-right curve of the Moon (Matches Image!) -->
+                <svg id="moon-orbit-arc" class="absolute -inset-12 w-[calc(100%+96px)] h-[calc(100%+96px)] pointer-events-none" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Segmented white/grey arc just above the upper-right limb of the moon -->
+                    <path d="M 435 72 A 445 445 0 0 1 835 282" stroke="#a5a7ad" stroke-width="2.4" stroke-dasharray="125 22 95 25 140" opacity="0.85" />
+                    <!-- Subtle dotted inner arc right along the moon's top-right edge -->
+                    <path d="M 540 94 A 428 428 0 0 1 785 255" stroke="#b8a8d9" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 9" opacity="0.65" />
+                    
+                    <!-- Prominent 5-pointed star sitting directly on the moon's upper-right orbital arc -->
+                    <path d="M 622 48 L 629 76 L 655 86 L 630 98 L 625 129 L 609 102 L 584 105 L 602 85 L 591 59 L 613 71 Z" fill="#9ea0a6" />
+                </svg>
+
+                <!-- High-Detail Procedural Purple Lunar Surface Canvas -->
+                <div class="relative w-full h-full rounded-full overflow-hidden shadow-2xl"
+                     style="box-shadow: inset -25px -30px 90px rgba(18, 12, 36, 0.75), inset 12px 18px 55px rgba(245, 235, 255, 0.35), 0 0 70px rgba(177, 145, 240, 0.22);">
+                    
+                    <canvas id="moonCanvas" width="900" height="900" class="w-full h-full block rounded-full"></canvas>
+
+                    <!-- Characteristic Dark Oval Smudge on the Upper-Middle Face of the Moon (as seen in the user's reference image) -->
+                    <div id="moon-dark-spot" 
+                         class="absolute pointer-events-none rounded-full"
+                         style="
+                            top: 14.5%;
+                            left: 53.5%;
+                            transform: translate(-50%, -50%);
+                            width: 26%;
+                            height: 6.2%;
+                            background: radial-gradient(ellipse at center, rgba(28, 25, 34, 0.92) 0%, rgba(45, 39, 58, 0.72) 45%, rgba(120, 102, 160, 0) 78%);
+                            filter: blur(4px);
+                         ">
+                    </div>
+
+                    <!-- Subtle Atmospheric Specular Highlight on Top Edge -->
+                    <div class="absolute inset-0 rounded-full pointer-events-none"
+                         style="background: radial-gradient(circle at 50% 8%, rgba(255,255,255,0.28) 0%, rgba(196,164,255,0.08) 38%, rgba(20,16,32,0.55) 88%);">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==========================================
+         JAVASCRIPT: PROCEDURAL PURPLE MOON & CURSOR PARALLAX
+    =========================================== -->
+    <script>
+        /**
+         * 1. PROCEDURAL HIGH-RESOLUTION PURPLE/LAVENDER MOON RENDERER
+         * Generates a realistic cratered lunar texture matching the purple moon in the reference image,
+         * including ray craters (Tycho/Copernicus style), lunar maria (darker purple seas), and fine grain.
+         */
+        function renderDetailedPurpleMoon() {
+            const canvas = document.getElementById('moonCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const radius = w / 2;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Save clipping region to circle
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.clip();
+
+            // A. Base Spherical Lavender-Purple Gradient
+            const baseGrad = ctx.createRadialGradient(cx * 0.92, cy * 0.65, radius * 0.05, cx, cy, radius);
+            baseGrad.addColorStop(0, '#ded0f8');    // Bright lavender highlight near upper-center
+            baseGrad.addColorStop(0.35, '#bfa7ec'); // Soft medium purple-lavender
+            baseGrad.addColorStop(0.72, '#9982cc'); // Deeper lunar purple
+            baseGrad.addColorStop(0.93, '#725ba6'); // Limb shading
+            baseGrad.addColorStop(1, '#523f80');    // Outer edge depth
+            ctx.fillStyle = baseGrad;
+            ctx.fillRect(0, 0, w, h);
+
+            // Seeded pseudo-random generator for consistent moon features matching the screenshot layout
+            let seed = 4219;
+            function rand() {
+                seed = (seed * 16807) % 2147483647;
+                return (seed - 1) / 2147483646;
+            }
+
+            // B. Lunar Maria (Darker purple-slate irregular patches like in the lower-left and middle of the screenshot)
+            const mariaPatches = [
+                { x: 0.36, y: 0.36, r: 0.14, alpha: 0.32, color: '#4c3e6b' },
+                { x: 0.43, y: 0.42, r: 0.11, alpha: 0.38, color: '#3f3259' },
+                { x: 0.34, y: 0.56, r: 0.16, alpha: 0.42, color: '#42365c' },
+                { x: 0.54, y: 0.53, r: 0.15, alpha: 0.36, color: '#463963' },
+                { x: 0.48, y: 0.62, r: 0.14, alpha: 0.35, color: '#3d3157' },
+                { x: 0.68, y: 0.42, r: 0.13, alpha: 0.22, color: '#5b4882' },
+                { x: 0.25, y: 0.48, r: 0.12, alpha: 0.28, color: '#4c3e6b' }
+            ];
+
+            mariaPatches.forEach(m => {
+                for (let i = 0; i < 18; i++) {
+                    const angle = rand() * Math.PI * 2;
+                    const dist = rand() * m.r * w * 0.7;
+                    const px = m.x * w + Math.cos(angle) * dist;
+                    const py = m.y * h + Math.sin(angle) * dist;
+                    const pr = (0.3 + rand() * 0.7) * m.r * w * 0.65;
+
+                    const g = ctx.createRadialGradient(px, py, pr * 0.1, px, py, pr);
+                    g.addColorStop(0, `rgba(54, 43, 78, ${m.alpha})`);
+                    g.addColorStop(0.6, `rgba(74, 59, 107, ${m.alpha * 0.5})`);
+                    g.addColorStop(1, 'rgba(120, 100, 165, 0)');
+                    ctx.fillStyle = g;
+                    ctx.beginPath();
+                    ctx.arc(px, py, pr, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+
+            // C. Bright Ejecta Ray Systems (Matching the bright white-lavender starbursts at top-center & middle-right)
+            const rayCenters = [
+                { x: 0.50, y: 0.11, r: 22, rays: 26, len: 290, alpha: 0.45 }, // Bright top-center crater rays
+                { x: 0.65, y: 0.39, r: 16, rays: 20, len: 230, alpha: 0.35 }, // Right-middle bright ray crater
+                { x: 0.58, y: 0.52, r: 14, rays: 16, len: 180, alpha: 0.30 }
+            ];
+
+            rayCenters.forEach(rc => {
+                const rx = rc.x * w;
+                const ry = rc.y * h;
+
+                // Draw radiating ejecta streaks
+                ctx.save();
+                for (let i = 0; i < rc.rays; i++) {
+                    const angle = (i / rc.rays) * Math.PI * 2 + (rand() - 0.5) * 0.25;
+                    const rayLen = rc.len * (0.4 + rand() * 0.8);
+                    const grad = ctx.createLinearGradient(rx, ry, rx + Math.cos(angle) * rayLen, ry + Math.sin(angle) * rayLen);
+                    grad.addColorStop(0, `rgba(250, 244, 255, ${rc.alpha})`);
+                    grad.addColorStop(0.4, `rgba(229, 212, 255, ${rc.alpha * 0.45})`);
+                    grad.addColorStop(1, 'rgba(200, 180, 240, 0)');
+
+                    ctx.strokeStyle = grad;
+                    ctx.lineWidth = 2 + rand() * 6;
+                    ctx.beginPath();
+                    ctx.moveTo(rx, ry);
+                    ctx.lineTo(rx + Math.cos(angle) * rayLen, ry + Math.sin(angle) * rayLen);
+                    ctx.stroke();
+                }
+
+                // Bright crater halo
+                const halo = ctx.createRadialGradient(rx, ry, 2, rx, ry, rc.r * 2.4);
+                halo.addColorStop(0, 'rgba(255, 252, 255, 0.85)');
+                halo.addColorStop(0.5, 'rgba(232, 215, 255, 0.35)');
+                halo.addColorStop(1, 'rgba(200, 175, 245, 0)');
+                ctx.fillStyle = halo;
+                ctx.beginPath();
+                ctx.arc(rx, ry, rc.r * 2.4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            // D. Hundreds of Detailed Craters (Large, Medium, Micro) with 3D rim highlights & inner shadows
+            const totalCraters = 420;
+            for (let i = 0; i < totalCraters; i++) {
+                const cxPos = rand() * w;
+                const cyPos = rand() * h;
+                // Keep within moon circle
+                const distFromCenter = Math.hypot(cxPos - cx, cyPos - cy);
+                if (distFromCenter > radius * 0.98) continue;
+
+                // Size distribution: mostly small/medium, some prominent craters
+                const sizeFactor = Math.pow(rand(), 3.2);
+                const cRadius = 2.5 + sizeFactor * 34;
+
+                // Outer bright rim (lit from top-right)
+                ctx.beginPath();
+                ctx.arc(cxPos, cyPos, cRadius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(238, 226, 255, ${0.12 + rand() * 0.18})`;
+                ctx.fill();
+
+                // Inner crater floor shadow (offset slightly top-left)
+                const floorGrad = ctx.createRadialGradient(
+                    cxPos - cRadius * 0.22,
+                    cyPos - cRadius * 0.22,
+                    cRadius * 0.1,
+                    cxPos,
+                    cyPos,
+                    cRadius * 0.92
+                );
+
+                const isDarkFloor = rand() > 0.65;
+                if (isDarkFloor) {
+                    floorGrad.addColorStop(0, 'rgba(58, 46, 84, 0.78)');
+                    floorGrad.addColorStop(0.7, 'rgba(88, 70, 126, 0.55)');
+                    floorGrad.addColorStop(1, 'rgba(175, 152, 224, 0.15)');
+                } else {
+                    floorGrad.addColorStop(0, 'rgba(92, 74, 134, 0.65)');
+                    floorGrad.addColorStop(0.75, 'rgba(138, 114, 190, 0.4)');
+                    floorGrad.addColorStop(1, 'rgba(220, 202, 252, 0.2)');
+                }
+
+                ctx.beginPath();
+                ctx.arc(cxPos, cyPos, cRadius * 0.88, 0, Math.PI * 2);
+                ctx.fillStyle = floorGrad;
+                ctx.fill();
+
+                // Sharp sunlit lower-right crater rim
+                ctx.beginPath();
+                ctx.arc(cxPos + cRadius * 0.08, cyPos + cRadius * 0.08, cRadius * 0.88, -0.2, Math.PI * 0.75);
+                ctx.strokeStyle = `rgba(248, 240, 255, ${0.22 + rand() * 0.3})`;
+                ctx.lineWidth = Math.max(1, cRadius * 0.11);
+                ctx.stroke();
+            }
+
+            // E. Fine Lunar Regolith Grain / Surface Texture
+            for (let i = 0; i < 3500; i++) {
+                const gx = rand() * w;
+                const gy = rand() * h;
+                const isLight = rand() > 0.5;
+                ctx.fillStyle = isLight ? 'rgba(245, 238, 255, 0.12)' : 'rgba(52, 40, 79, 0.14)';
+                ctx.fillRect(gx, gy, 1.8, 1.8);
+            }
+
+            // F. Spherical 3D Vignette around the Moon's edge
+            const limbShadow = ctx.createRadialGradient(cx, cy * 0.88, radius * 0.65, cx, cy, radius);
+            limbShadow.addColorStop(0, 'rgba(0,0,0,0)');
+            limbShadow.addColorStop(0.82, 'rgba(42, 30, 68, 0.18)');
+            limbShadow.addColorStop(1, 'rgba(22, 16, 38, 0.55)');
+            ctx.fillStyle = limbShadow;
+            ctx.fillRect(0, 0, w, h);
+
+            ctx.restore();
+        }
+
+        /**
+         * 2. INTERACTIVE CURSOR & WHEEL ANIMATION ENGINE
+         * Moves the Moon smoothly up & down when the user moves the cursor vertically (and tilts horizontally),
+         * plus responds to mouse wheel scrolling and touch movement on mobile.
+         */
+        const moonEl = document.getElementById('interactive-moon');
+        const moonOrbitArc = document.getElementById('moon-orbit-arc');
+        const parallaxStars = document.getElementById('parallax-stars');
+        const parallaxOrbits = document.getElementById('parallax-orbits');
+        const parallaxHills = document.getElementById('parallax-hills');
+
+        let targetMouseX = 0; // Normalized -1 to 1 (left to right)
+        let targetMouseY = 0; // Normalized -1 to 1 (top to bottom)
+        let currentMouseX = 0;
+        let currentMouseY = 0;
+        let wheelOffsetY = 0;
+        let currentWheelY = 0;
+        let clock = 0;
+
+        // Track Mouse Cursor Position (Up/Down and Left/Right)
+        window.addEventListener('mousemove', (e) => {
+            targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            targetMouseY = (e.clientY / window.innerHeight) * 2 - 1;
+        });
+
+        // Track Mouse Wheel for extra vertical moon movement even on a locked 100vh screen
+        window.addEventListener('wheel', (e) => {
+            wheelOffsetY = Math.max(-70, Math.min(70, wheelOffsetY + e.deltaY * 0.12));
+        }, { passive: true });
+
+        // Track Touch Move on Mobile/Tablet so Moon also follows finger up and down
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches && e.touches.length > 0) {
+                const touch = e.touches[0];
+                targetMouseX = (touch.clientX / window.innerWidth) * 2 - 1;
+                targetMouseY = (touch.clientY / window.innerHeight) * 2 - 1;
+            }
+        }, { passive: true });
+
+        // Smooth 60FPS Animation Loop (Lerp physics)
+        function animateScene() {
+            clock += 0.022;
+
+            // Smooth interpolation (damping) towards target cursor and wheel positions
+            currentMouseX += (targetMouseX - currentMouseX) * 0.075;
+            currentMouseY += (targetMouseY - currentMouseY) * 0.075;
+            
+            // Gradually relax wheel offset back toward 0 while keeping smooth response
+            wheelOffsetY *= 0.96;
+            currentWheelY += (wheelOffsetY - currentWheelY) * 0.08;
+
+            // Gentle idle breathing motion so the moon feels alive even when cursor stops
+            const idleWaveY = Math.sin(clock) * 12;
+            const idleWaveRotate = Math.cos(clock * 0.7) * 1.4;
+
+            // Calculate vertical & horizontal displacement for the Moon
+            // Moving cursor UP/DOWN moves the moon smoothly UP/DOWN
+            const moonMoveY = (currentMouseY * 68) + currentWheelY + idleWaveY;
+            const moonMoveX = (currentMouseX * 28);
+            const moonRotate = (currentMouseX * 5.5) + (currentMouseY * 2.5) + idleWaveRotate;
+
+            if (moonEl) {
+                moonEl.style.transform = `translate3d(${moonMoveX.toFixed(2)}px, ${moonMoveY.toFixed(2)}px, 0) rotate(${moonRotate.toFixed(2)}deg)`;
+            }
+
+            // Counter-rotate orbital arc slightly for depth
+            if (moonOrbitArc) {
+                const arcY = currentMouseY * -14;
+                const arcRot = -currentMouseX * 3.2;
+                moonOrbitArc.style.transform = `translate3d(0, ${arcY.toFixed(2)}px, 0) rotate(${arcRot.toFixed(2)}deg)`;
+            }
+
+            // Multi-layer Starfield & Orbital Rings Parallax
+            if (parallaxStars) {
+                const starX = -currentMouseX * 22;
+                const starY = -currentMouseY * 28 - (currentWheelY * 0.25);
+                parallaxStars.style.transform = `translate3d(${starX.toFixed(2)}px, ${starY.toFixed(2)}px, 0)`;
+            }
+
+            if (parallaxOrbits) {
+                const orbitX = -currentMouseX * 14;
+                const orbitY = -currentMouseY * 18 - (currentWheelY * 0.15);
+                parallaxOrbits.style.transform = `translate3d(${orbitX.toFixed(2)}px, ${orbitY.toFixed(2)}px, 0)`;
+            }
+
+            if (parallaxHills) {
+                const hillX = -currentMouseX * 10;
+                const hillY = currentMouseY * 12;
+                parallaxHills.style.transform = `translate3d(${hillX.toFixed(2)}px, ${hillY.toFixed(2)}px, 0)`;
+            }
+
+            requestAnimationFrame(animateScene);
+        }
+
+        // Initialize on window load
+        window.onload = function () {
+            renderDetailedPurpleMoon();
+            animateScene();
+        };
+    </script>
+</body>
+</html>
